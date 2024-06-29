@@ -7,7 +7,7 @@ public class GameController : MonoBehaviour
     public CamerasManager cameraManager;
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.R))
         {
             // Начало битвы
             cameraManager.ActivateBattleCamera();
