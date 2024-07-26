@@ -12,11 +12,11 @@ public class GameTestingButtons : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        /*if (Input.GetKeyDown(KeyCode.R))
         {
             Debug.Log("Battle Should Start");
             _battle.StartBattle();
-        }
+        }*/
 
     }
 }

@@ -8,12 +8,15 @@ public class ActionPanel : MonoBehaviour
     public List<Button> abilityButtons;
     public Button itemButton;
     public TextMeshProUGUI creatureNameText;
+    public GameObject targetPanel; // New panel for selecting targets
+    public Button targetButtonPrefab; // Prefab for target buttons
 
     private Creature _currentCreature;
-    private System.Action<Creature, Ability> _onAbilityChosen;
+    private Ability _chosenAbility;
+    private System.Action<Creature, Ability, Creature> _onAbilityChosen;
     private System.Action<Creature, Item> _onItemChosen;
 
-    public void ShowActions(Creature creature, System.Action<Creature, Ability> onAbilityChosen, System.Action<Creature, Item> onItemChosen)
+    public void ShowActions(Creature creature, System.Action<Creature, Ability, Creature> onAbilityChosen, System.Action<Creature, Item> onItemChosen)
     {
         this._currentCreature = creature;
         this._onAbilityChosen = onAbilityChosen;
@@ -45,7 +48,32 @@ public class ActionPanel : MonoBehaviour
 
     void OnAbilityButtonClicked(Ability ability)
     {
-        _onAbilityChosen?.Invoke(_currentCreature, ability);
+        _chosenAbility = ability;
+        ShowTargetPanel(); // Show the target selection panel
+    }
+
+    void ShowTargetPanel()
+    {
+        // Show the panel and create buttons for each alive enemy
+        targetPanel.SetActive(true);
+        foreach (Transform child in targetPanel.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        List<Creature> aliveEnemies = FindObjectOfType<Battle>().enemyDrone.activeCreatures.FindAll(c => !c.IsFainted());
+        foreach (var target in aliveEnemies)
+        {
+            Button targetButton = Instantiate(targetButtonPrefab, targetPanel.transform);
+            targetButton.GetComponentInChildren<TextMeshProUGUI>().text = target.creatureName;
+            targetButton.onClick.AddListener(() => OnTargetButtonClicked(target));
+        }
+    }
+
+    void OnTargetButtonClicked(Creature target)
+    {
+        _onAbilityChosen?.Invoke(_currentCreature, _chosenAbility, target);
+        targetPanel.SetActive(false);
         gameObject.SetActive(false);
     }
 

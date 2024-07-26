@@ -1,0 +1,131 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8854907157707723752
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1530802371362384505}
+  - component: {fileID: 249887432920117278}
+  m_Layer: 0
+  m_Name: Creature 3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1530802371362384505
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8854907157707723752}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5102416200051502529}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &249887432920117278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8854907157707723752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df3c1eb7ad3dfa245a93e673655100b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  creatureName: 
+  maxHP: 75
+  attack: 7
+  defense: 2
+  speed: 5
+  abilities:
+  - {fileID: 11400000, guid: d7bfeabf81ce4e445901e4d5b9e76640, type: 2}
+  - {fileID: 11400000, guid: d97ca2304fa7aba419c5e75c98383513, type: 2}
+  - {fileID: 11400000, guid: 36eb7b81dd2c892438b7a4ae3fd897c1, type: 2}
+  - {fileID: 11400000, guid: 00de884b77d1b0e448ce4cf7a308b354, type: 2}
+--- !u!1001 &5098317365026390585
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1530802371362384505}
+    m_Modifications:
+    - target: {fileID: 1403878853111530, guid: ca4dde43a8317714582f4c92a26710f4, type: 3}
+      propertyPath: m_Name
+      value: Polygonal Spiderling Venom Magenta
+      objectReference: {fileID: 0}
+    - target: {fileID: 4415783297757176, guid: ca4dde43a8317714582f4c92a26710f4, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4415783297757176, guid: ca4dde43a8317714582f4c92a26710f4, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4415783297757176, guid: ca4dde43a8317714582f4c92a26710f4, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4415783297757176, guid: ca4dde43a8317714582f4c92a26710f4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4415783297757176, guid: ca4dde43a8317714582f4c92a26710f4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4415783297757176, guid: ca4dde43a8317714582f4c92a26710f4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4415783297757176, guid: ca4dde43a8317714582f4c92a26710f4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4415783297757176, guid: ca4dde43a8317714582f4c92a26710f4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4415783297757176, guid: ca4dde43a8317714582f4c92a26710f4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4415783297757176, guid: ca4dde43a8317714582f4c92a26710f4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4415783297757176, guid: ca4dde43a8317714582f4c92a26710f4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4415783297757176, guid: ca4dde43a8317714582f4c92a26710f4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4415783297757176, guid: ca4dde43a8317714582f4c92a26710f4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ca4dde43a8317714582f4c92a26710f4, type: 3}
+--- !u!4 &5102416200051502529 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4415783297757176, guid: ca4dde43a8317714582f4c92a26710f4, type: 3}
+  m_PrefabInstance: {fileID: 5098317365026390585}
+  m_PrefabAsset: {fileID: 0}

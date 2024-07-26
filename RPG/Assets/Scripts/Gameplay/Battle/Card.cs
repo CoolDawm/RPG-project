@@ -4,4 +4,5 @@ using UnityEngine;
 public class Card : MonoBehaviour
 {
     public GameObject creaturePrefab;
+    public int evolutionMultiplyer = 1;
 }

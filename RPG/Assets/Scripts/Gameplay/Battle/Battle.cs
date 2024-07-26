@@ -14,27 +14,34 @@ public class Battle : MonoBehaviour
     private Transform _playerSpawnPoint3;
     public Drone playerDrone;
     public Drone enemyDrone;
-    public ActionPanel actionPanel; 
+    public ActionPanel actionPanel;
     private bool _playerTurn = true;
     private List<QueuedAction> _actionQueue = new List<QueuedAction>();
     private EnemiesSpawn _enemiesSpawn;
-   
-
+    private CamerasManager _cameraManager;
+    private PlayerMovement _playerMovement;
+    private GameObject _currentTrigger;
+    private MissionManager _missionManager;
     void Start()
     {
-        _enemiesSpawn = GameObject.FindAnyObjectByType<EnemiesSpawn>();
+        _enemiesSpawn = FindAnyObjectByType<EnemiesSpawn>();
+        _cameraManager = FindAnyObjectByType<CamerasManager>();
+        _playerMovement = FindAnyObjectByType<PlayerMovement>();
+        _missionManager = FindAnyObjectByType<MissionManager>();
         //StartCoroutine(BattleSequence());
     }
 
-    public void StartBattle()
+    public void StartBattle(GameObject trigger)
     {
         SpawnPlayerCreatures();
         SpawnEnemyCreatures();
         StartCoroutine(BattleSequence());
+        _playerMovement.ChangeBattleStatus();
+        _currentTrigger = trigger;
     }
     private void SpawnEnemyCreatures()
     {
-        enemyDrone.activeCreatures= _enemiesSpawn.SpawnEnemies(3, _enemySpawnPoints);
+        enemyDrone.activeCreatures = _enemiesSpawn.SpawnEnemies(3, _enemySpawnPoints);
     }
     private void SpawnPlayerCreatures()
     {
@@ -50,7 +57,7 @@ public class Battle : MonoBehaviour
 
     IEnumerator BattleSequence()
     {
-        yield return new WaitForSeconds(0.5f); // Ждем немного для корректного добавления существ
+        yield return new WaitForSeconds(0.5f); 
 
         while (AreCreaturesAlive(playerDrone) && AreCreaturesAlive(enemyDrone))
         {
@@ -73,11 +80,12 @@ public class Battle : MonoBehaviour
                 {
                     if (!creature.IsFainted())
                     {
-                        // Вражеский дрон случайным образом выбирает действие
+                        
                         if (Random.Range(0, 2) == 0 && creature.abilities.Count > 0)
                         {
                             Ability enemyAbility = creature.abilities[Random.Range(0, creature.abilities.Count)];
-                            _actionQueue.Add(new QueuedAction(creature, enemyAbility));
+                            var target = GetRandomAliveCreature(playerDrone.activeCreatures);
+                            _actionQueue.Add(new QueuedAction(creature, enemyAbility, target));
                         }
                         else if (enemyDrone.items.Count > 0)
                         {
@@ -128,6 +136,10 @@ public class Battle : MonoBehaviour
         enemyDrone.activeCreatures.Clear();
 
         Debug.Log("All creatures have been removed and lists cleared.");
+        _cameraManager.ActivatePseudo2DCamera();
+        _playerMovement.ChangeBattleStatus();
+        Destroy(_currentTrigger);
+        _missionManager.InvokeCheckingAfterTime();
     }
 
     IEnumerator ExecuteTurn()
@@ -142,12 +154,7 @@ public class Battle : MonoBehaviour
 
             if (action.ability != null)
             {
-                var target = GetRandomAliveCreature(_playerTurn ? enemyDrone.activeCreatures : playerDrone.activeCreatures);
-                while (target != null && target.IsFainted())
-                {
-                    target = GetRandomAliveCreature(_playerTurn ? enemyDrone.activeCreatures : playerDrone.activeCreatures);
-                }
-
+                var target = action.target; // Use the selected target
                 if (target != null)
                 {
                     int damage = CalculateDamage(action.creature, target, action.ability);
@@ -189,9 +196,9 @@ public class Battle : MonoBehaviour
         return false;
     }
 
-    void OnAbilityChosen(Creature creature, Ability chosenAbility)
+    void OnAbilityChosen(Creature creature, Ability chosenAbility, Creature target)
     {
-        _actionQueue.Add(new QueuedAction(creature, chosenAbility));
+        _actionQueue.Add(new QueuedAction(creature, chosenAbility, target));
     }
 
     void OnItemChosen(Creature creature, Item chosenItem)
@@ -230,12 +237,14 @@ public class QueuedAction
 {
     public Creature creature;
     public Ability ability;
+    public Creature target;
     public Item item;
 
-    public QueuedAction(Creature creature, Ability ability)
+    public QueuedAction(Creature creature, Ability ability, Creature target)
     {
         this.creature = creature;
         this.ability = ability;
+        this.target = target;
     }
 
     public QueuedAction(Creature creature, Item item)
