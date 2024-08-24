@@ -16,8 +16,12 @@ public class Drone : MonoBehaviour
             GameObject creatureObj = Instantiate(card.creaturePrefab);
             Creature creature = creatureObj.GetComponent<Creature>();
             activeCreatures.Add(creature);
-            creature.Initialize("Players creature number " + (i + 1));
+            creature.Initialize($"{gameObject.name} creature number " + (i + 1));
             i++;
+        }
+        if (gameObject.tag == "Player")
+        {
+            items=InventoryData.Instance.items;
         }
     }
 

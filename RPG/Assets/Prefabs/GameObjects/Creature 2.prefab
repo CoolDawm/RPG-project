@@ -45,11 +45,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df3c1eb7ad3dfa245a93e673655100b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  creatureName: 
+  creatureName: Treant
   maxHP: 50
   attack: 10
   defense: 2
   speed: 5
+  experience: 0
   abilities:
   - {fileID: 11400000, guid: d7bfeabf81ce4e445901e4d5b9e76640, type: 2}
   - {fileID: 11400000, guid: d97ca2304fa7aba419c5e75c98383513, type: 2}

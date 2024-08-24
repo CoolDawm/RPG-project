@@ -22,16 +22,12 @@ public class DropSlot : MonoBehaviour, IDropHandler
                 }
                 else
                 {
-                    // Заменяем объект
                     ReplaceDroppedObject(droppedObject);
                 }
 
-                // Обновляем родителя и позицию сброшенного объекта
                 RectTransform droppedRectTransform = droppedObject.GetComponent<RectTransform>();
                 droppedRectTransform.SetParent(transform);
                 droppedRectTransform.anchoredPosition = Vector2.zero;
-
-                // Обновляем Drone
                 UpdateDrone(creatureCard, droppedObject);
             }
         }
@@ -39,13 +35,12 @@ public class DropSlot : MonoBehaviour, IDropHandler
 
     private void ReplaceDroppedObject(GameObject newObject)
     {
-        // Определяем индекс объекта для замены на основе позиции
         int indexToReplace = droppedObjects.Count - 1;
         GameObject oldObject = droppedObjects[indexToReplace];
         droppedObjects[indexToReplace] = newObject;
-
-        // Удаляем старый объект (или перемещаем его куда-то еще)
-        Destroy(oldObject);
+        oldObject.transform.SetParent(newObject.GetComponent<Draggable>().originalParent);
+        Debug.Log("1");
+        //Destroy(oldObject);
     }
 
     private void UpdateDrone(Card newCreatureCard, GameObject droppedObject)

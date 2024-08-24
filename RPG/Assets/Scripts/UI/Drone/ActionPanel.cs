@@ -1,16 +1,22 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ActionPanel : MonoBehaviour
 {
+    [SerializeField]
+    private List<GameObject> objectsToHide;  // UI
+    [SerializeField]
+    private List<GameObject> objectsToShow;  // UI
     public List<Button> abilityButtons;
     public Button itemButton;
     public TextMeshProUGUI creatureNameText;
     public GameObject targetPanel; // New panel for selecting targets
     public Button targetButtonPrefab; // Prefab for target buttons
-
+    public GameObject itemButtonPrefab; // Префаб кнопки предмета
+    public Transform itemsPanel; // Панель, в которую будем добавлять кнопки
     private Creature _currentCreature;
     private Ability _chosenAbility;
     private System.Action<Creature, Ability, Creature> _onAbilityChosen;
@@ -24,6 +30,7 @@ public class ActionPanel : MonoBehaviour
 
         creatureNameText.text = creature.creatureName;
 
+        // Инициализация кнопок способностей
         for (int i = 0; i < abilityButtons.Count; i++)
         {
             if (i < creature.abilities.Count)
@@ -40,8 +47,34 @@ public class ActionPanel : MonoBehaviour
             }
         }
 
-        itemButton.onClick.RemoveAllListeners();
-        itemButton.onClick.AddListener(OnItemButtonClicked);
+        // Очистка старых кнопок предметов
+        foreach (Transform child in itemsPanel)
+        {
+            Destroy(child.gameObject);
+        }
+
+        var items = FindObjectOfType<Battle>().playerDrone.items;
+        var uniqueItems = new Dictionary<string, int>(); // Для подсчета количества уникальных предметов
+
+        foreach (var item in items)
+        {
+            if (uniqueItems.ContainsKey(item.itemName))
+            {
+                uniqueItems[item.itemName]++;
+            }
+            else
+            {
+                uniqueItems[item.itemName] = 1;
+            }
+        }
+
+        // Создание кнопок для уникальных предметов
+        foreach (var uniqueItem in uniqueItems)
+        {
+            GameObject newItemButton = Instantiate(itemButtonPrefab, itemsPanel);
+            newItemButton.GetComponentInChildren<TextMeshProUGUI>().text = $"{uniqueItem.Key} x{uniqueItem.Value}";
+            newItemButton.GetComponent<Button>().onClick.AddListener(() => OnItemButtonClicked(uniqueItem.Key));
+        }
 
         gameObject.SetActive(true);
     }
@@ -73,16 +106,28 @@ public class ActionPanel : MonoBehaviour
     void OnTargetButtonClicked(Creature target)
     {
         _onAbilityChosen?.Invoke(_currentCreature, _chosenAbility, target);
+        foreach (var obj in objectsToHide)
+        {
+            obj.SetActive(false);
+        }
+        foreach (var obj in objectsToShow)
+        {
+            obj.SetActive(true);
+        }
         targetPanel.SetActive(false);
         gameObject.SetActive(false);
     }
 
-    void OnItemButtonClicked()
+    void OnItemButtonClicked(string itemName)
     {
-        // Здесь вы можете выбрать предмет из списка доступных предметов
-        // Для примера:
-        Item chosenItem = FindObjectOfType<Battle>().playerDrone.items[0];
-        _onItemChosen?.Invoke(_currentCreature, chosenItem);
+        var items = FindObjectOfType<Battle>().playerDrone.items;
+        Item chosenItem = items.FirstOrDefault(item => item.itemName == itemName);
+
+        if (chosenItem != null)
+        {
+            _onItemChosen?.Invoke(_currentCreature, chosenItem);
+        }
+
         gameObject.SetActive(false);
     }
 }

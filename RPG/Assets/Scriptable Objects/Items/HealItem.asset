@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: HealItem
   m_EditorClassIdentifier: 
   itemName: Heal
-  healAmount: 5
+  healAmount: 15
+  price: 5

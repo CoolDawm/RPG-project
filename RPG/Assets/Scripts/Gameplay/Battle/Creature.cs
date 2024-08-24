@@ -8,9 +8,10 @@ public class Creature : MonoBehaviour
     public int attack;
     public int defense;
     public int speed;
+    public int experience;
     public List<Ability> abilities;
 
-    private int currentHP;
+    private int _currentHP;
 
     void Start()
     {
@@ -19,40 +20,40 @@ public class Creature : MonoBehaviour
     public void Initialize(string name)
     {
         creatureName = name;
-        currentHP = maxHP;
+        _currentHP = maxHP;
     }
 
     public bool IsFainted()
     {
-        return currentHP <= 0;
+        return _currentHP <= 0;
     }
 
     public void TakeDamage(int damage)
     {
-        currentHP -= damage;
-        if (currentHP < 0)
+        _currentHP -= damage;
+        if (_currentHP < 0)
         {
-            currentHP = 0;
+            _currentHP = 0;
 
         }
     }
 
     public int GetCurrentHP()
     {
-        return currentHP;
+        return _currentHP;
     }
 
     public void Heal(int amount)
     {
-        currentHP += amount;
-        if (currentHP > maxHP)
+        _currentHP += amount;
+        if (_currentHP > maxHP)
         {
-            currentHP = maxHP;
+            _currentHP = maxHP;
         }
     }
 
     public override string ToString()
     {
-        return $"{creatureName} (HP: {currentHP}/{maxHP})";
+        return $"{creatureName} (HP: {_currentHP}/{maxHP})";
     }
 }

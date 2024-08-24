@@ -6,7 +6,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     private CanvasGroup canvasGroup;
     private RectTransform rectTransform;
     private Vector2 originalPosition;
-    private Transform originalParent;
+    public Transform originalParent;
 
     void Awake()
     {
@@ -33,12 +33,13 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         canvasGroup.alpha = 1.0f;
         canvasGroup.blocksRaycasts = true;
 
-        if (eventData.pointerEnter != null && eventData.pointerEnter.GetComponent<DropSlot>())
+        if (rectTransform.parent!=originalParent)
         {
-            rectTransform.SetParent(eventData.pointerEnter.transform, true); // Устанавливаем нового родителя
+           // rectTransform.SetParent(eventData.pointerEnter.transform, true); // Устанавливаем нового родителя
         }
         else
         {
+            Debug.Log("God Dammit");
             rectTransform.anchoredPosition = originalPosition;
             rectTransform.SetParent(originalParent, true); // Возвращаем объект к исходному родителю
         }
