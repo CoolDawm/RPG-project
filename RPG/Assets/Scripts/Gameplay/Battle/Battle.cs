@@ -29,12 +29,14 @@ public class Battle : MonoBehaviour
     private PlayerMovement _playerMovement;
     private GameObject _currentTrigger;
     private MissionManager _missionManager;
+    private FloatTextManager _floatTextManager;
     void Start()
     {
         _enemiesSpawn = FindAnyObjectByType<EnemiesSpawn>();
         _cameraManager = FindAnyObjectByType<CamerasManager>();
         _playerMovement = FindAnyObjectByType<PlayerMovement>();
         _missionManager = FindAnyObjectByType<MissionManager>();
+        _floatTextManager=FindAnyObjectByType<FloatTextManager>();
         //StartCoroutine(BattleSequence());
     }
     
@@ -83,7 +85,7 @@ public class Battle : MonoBehaviour
             GameObject creatureObj = Instantiate(playerDrone.cards[i].creaturePrefab, spawnPoints[i].position, spawnPoints[i].rotation);
             Creature creature = creatureObj.GetComponent<Creature>();
             playerDrone.activeCreatures.Add(creature);
-            creature.Initialize("Players creature number " + (i + 1));
+            creature.Initialize($"Players {creature.creatureName} " + (i + 1));
         }
     }
 
@@ -199,13 +201,21 @@ public class Battle : MonoBehaviour
                 var target = action.target; // Use the selected target
                 if (target != null)
                 {
+                    action.creature.GetComponentInChildren<Animator>().SetTrigger("Melee Attack");
+                    yield return new WaitForSeconds(1.3f);
+
                     int damage = CalculateDamage(action.creature, target, action.ability);
                     target.TakeDamage(damage);
+                    target.GetComponentInChildren<Animator>().SetTrigger("Take Damage");
+                    yield return new WaitForSeconds(1f);
+
+                    _floatTextManager.ShowFloatingNumbers(target.gameObject.transform,damage,Color.red);
                     Debug.Log($"{action.creature.creatureName} used {action.ability.abilityName}! It dealt {damage} damage to {target.creatureName}.");
                     Debug.Log(target.ToString());
 
                     if (target.IsFainted())
                     {
+                        target.GetComponentInChildren<Animator>().SetTrigger("Die");
                         CheckForWinner();
                     }
                 }

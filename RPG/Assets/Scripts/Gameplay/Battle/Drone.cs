@@ -31,4 +31,14 @@ public class Drone : MonoBehaviour
         Debug.Log($"{droneName} used {item.itemName} on {creature.creatureName}. It healed {item.healAmount} HP.");
         items.Remove(item);
     }
+    public bool CheckForActiveCards()
+    {
+        if (cards.Count!=0)
+        {
+            return true;
+        }else
+        {
+            return false;
+        }
+    }
 }

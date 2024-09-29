@@ -10,18 +10,21 @@ public class ActionPanel : MonoBehaviour
     private List<GameObject> objectsToHide;  // UI
     [SerializeField]
     private List<GameObject> objectsToShow;  // UI
+    [SerializeField]
+    private GameObject _creatureHPBar;
     public List<Button> abilityButtons;
     public Button itemButton;
     public TextMeshProUGUI creatureNameText;
-    public GameObject targetPanel; // New panel for selecting targets
-    public Button targetButtonPrefab; // Prefab for target buttons
-    public GameObject itemButtonPrefab; // Префаб кнопки предмета
-    public Transform itemsPanel; // Панель, в которую будем добавлять кнопки
+    public GameObject targetPanel; 
+    public Button targetButtonPrefab; 
+    public GameObject itemButtonPrefab; 
+    public Transform itemsPanel;
+    public bool isAwaitingForTarget=false;
     private Creature _currentCreature;
     private Ability _chosenAbility;
     private System.Action<Creature, Ability, Creature> _onAbilityChosen;
     private System.Action<Creature, Item> _onItemChosen;
-
+    
     public void ShowActions(Creature creature, System.Action<Creature, Ability, Creature> onAbilityChosen, System.Action<Creature, Item> onItemChosen)
     {
         this._currentCreature = creature;
@@ -29,8 +32,13 @@ public class ActionPanel : MonoBehaviour
         this._onItemChosen = onItemChosen;
 
         creatureNameText.text = creature.creatureName;
+        if (_currentCreature.maxHP != _currentCreature.GetCurrentHP())
+        {
+           
+            _creatureHPBar.GetComponent<Image>().fillAmount = (float)(_currentCreature.maxHP - _currentCreature.GetCurrentHP()) / _currentCreature.maxHP;
 
-        // Инициализация кнопок способностей
+        }
+       
         for (int i = 0; i < abilityButtons.Count; i++)
         {
             if (i < creature.abilities.Count)
@@ -47,15 +55,13 @@ public class ActionPanel : MonoBehaviour
             }
         }
 
-        // Очистка старых кнопок предметов
         foreach (Transform child in itemsPanel)
         {
             Destroy(child.gameObject);
         }
 
         var items = FindObjectOfType<Battle>().playerDrone.items;
-        var uniqueItems = new Dictionary<string, int>(); // Для подсчета количества уникальных предметов
-
+        var uniqueItems = new Dictionary<string, int>(); 
         foreach (var item in items)
         {
             if (uniqueItems.ContainsKey(item.itemName))
@@ -68,7 +74,6 @@ public class ActionPanel : MonoBehaviour
             }
         }
 
-        // Создание кнопок для уникальных предметов
         foreach (var uniqueItem in uniqueItems)
         {
             GameObject newItemButton = Instantiate(itemButtonPrefab, itemsPanel);
@@ -77,11 +82,13 @@ public class ActionPanel : MonoBehaviour
         }
 
         gameObject.SetActive(true);
+
     }
 
     void OnAbilityButtonClicked(Ability ability)
     {
         _chosenAbility = ability;
+        isAwaitingForTarget = true;
         ShowTargetPanel(); // Show the target selection panel
     }
 
@@ -102,10 +109,27 @@ public class ActionPanel : MonoBehaviour
             targetButton.onClick.AddListener(() => OnTargetButtonClicked(target));
         }
     }
+    public void ChooseTarget(Creature target)
+    {
+        _onAbilityChosen?.Invoke(_currentCreature, _chosenAbility, target);
+        isAwaitingForTarget = false;
 
+        foreach (var obj in objectsToHide)
+        {
+            obj.SetActive(false);
+        }
+        foreach (var obj in objectsToShow)
+        {
+            obj.SetActive(true);
+        }
+        targetPanel.SetActive(false);
+        gameObject.SetActive(false);
+    }
     void OnTargetButtonClicked(Creature target)
     {
         _onAbilityChosen?.Invoke(_currentCreature, _chosenAbility, target);
+        isAwaitingForTarget = false;
+
         foreach (var obj in objectsToHide)
         {
             obj.SetActive(false);

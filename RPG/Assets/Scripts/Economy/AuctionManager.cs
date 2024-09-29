@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class AuctionManager : MonoBehaviour
 {
     //from pubic to private all of it
-    public List<Card> auctionCards; 
+    public List<CardData> auctionCards; 
     public Transform cardsPanel;
     public GameObject cardButtonPrefab; 
     public GameObject cardPrefab; 
@@ -29,7 +29,7 @@ public class AuctionManager : MonoBehaviour
         }
     }
 
-    public void PurchaseCard(Card card)
+    public void PurchaseCard(CardData card)
     {
         int cardPrice = card.evolutionMultiplyer * 25; // Рассчитываем цену карты
 
@@ -45,7 +45,7 @@ public class AuctionManager : MonoBehaviour
         }
     }
 
-    private void SpawnCard(Card card)
+    private void SpawnCard(CardData card)
     {
         GameObject newCardInstance = Instantiate(cardPrefab);
         newCardInstance.name = card.name;

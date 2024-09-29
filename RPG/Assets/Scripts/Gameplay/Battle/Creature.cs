@@ -1,20 +1,24 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Creature : MonoBehaviour
+public class Creature : MonoBehaviour,IPointerClickHandler,IPointerEnterHandler,IPointerExitHandler
 {
+    [SerializeField]
+    private int _currentHP;
     public string creatureName;
-    public int maxHP;
+    public int maxHP;//should be private
     public int attack;
     public int defense;
     public int speed;
     public int experience;
     public List<Ability> abilities;
-
-    private int _currentHP;
+    private Light _creatureHighlight;
 
     void Start()
     {
+        _creatureHighlight= GetComponentInChildren<Light>() ;
+        _creatureHighlight.enabled = false ;
     }
 
     public void Initialize(string name)
@@ -55,5 +59,34 @@ public class Creature : MonoBehaviour
     public override string ToString()
     {
         return $"{creatureName} (HP: {_currentHP}/{maxHP})";
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        Debug.Log("In");
+        if (tag != "Enemy") return;
+        Debug.Log("In 2");
+
+        ActionPanel panel = FindAnyObjectByType<ActionPanel>();
+        if (panel.isAwaitingForTarget)
+        {
+            Debug.Log("In 3");
+
+            panel.ChooseTarget(this);
+        }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (tag != "Enemy") return;
+
+        _creatureHighlight.enabled = true;
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (tag != "Enemy") return;
+
+        _creatureHighlight.enabled = false;
     }
 }

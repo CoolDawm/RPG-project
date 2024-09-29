@@ -12,6 +12,7 @@ public class EnemiesSpawn : MonoBehaviour
         for(int i = 0; i < amount; i++)
         {
             GameObject creatureObj = Instantiate(_enemiesPrefabs[Random.Range(0,_enemiesPrefabs.Count)], spawnPoints[i].position, spawnPoints[i].rotation);
+            creatureObj.tag = "Enemy";
             Creature creature = creatureObj.GetComponent<Creature>();
            
             creature.Initialize("Enemy creature number " + (i + 1));
