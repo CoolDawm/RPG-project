@@ -21,7 +21,7 @@ public class DroneSlot : MonoBehaviour, ISlot, IDropHandler
     public virtual void AddItem(Item newItem)
     {
         item = newItem;
-        icon.sprite = item.icon.sprite;
+        icon.sprite = item.icon;
         // icon.enabled = true;
     }
 

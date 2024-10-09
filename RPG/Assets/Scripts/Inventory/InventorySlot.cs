@@ -13,6 +13,7 @@ public class InventorySlot : MonoBehaviour, ISlot, IDropHandler
     public Action onItemInfoUpdate;
     private void Start()
     {
+        icon=GetComponentInParent<Image>();
         if (item != null)
         {
             AddItem(item);
@@ -23,7 +24,7 @@ public class InventorySlot : MonoBehaviour, ISlot, IDropHandler
     {
         Debug.Log(newItem.icon);
         item = newItem;
-        icon.sprite = item.icon.sprite;
+        icon.sprite = item.icon;
         if (item.isStackable)
         {
             _itemStackCount++;
@@ -35,6 +36,7 @@ public class InventorySlot : MonoBehaviour, ISlot, IDropHandler
     public void ClearSlot()
     {
         item = null;
+        Debug.Log(icon);
         icon.sprite = null;
         _itemStackCount = 0;
        // icon.enabled = false;

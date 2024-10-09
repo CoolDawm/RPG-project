@@ -42,9 +42,11 @@ public class SyncCardsWithDrone : MonoBehaviour
 
                 if (targetChild == null)
                 {
+
                     GameObject newChild = Instantiate(sourceChild.gameObject, targetObject.transform);
                     newChild.name = sourceChild.name; // Сохранение имени, если нужно
                     newChild.GetComponent<Card>().cardId = sourceCard.cardId;
+                    newChild.AddComponent<Draggable>();
                 }
                 else
                 {

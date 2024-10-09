@@ -40,8 +40,9 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         else
         {
             Debug.Log("God Dammit");
-            rectTransform.anchoredPosition = originalPosition;
             rectTransform.SetParent(originalParent, true); // Возвращаем объект к исходному родителю
+            rectTransform.anchoredPosition = originalPosition;
+
         }
     }
 }

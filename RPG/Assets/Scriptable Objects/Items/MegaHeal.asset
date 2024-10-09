@@ -15,3 +15,5 @@ MonoBehaviour:
   itemName: MegaHeal
   healAmount: 100
   price: 100
+  icon: {fileID: 21300000, guid: 3483b6625e12438419acba7a1513aaf8, type: 3}
+  isStackable: 0
