@@ -9,7 +9,7 @@ public class Item : ScriptableObject
     public int price;
     public Sprite icon;
     public bool isStackable;
-   
+    public ItemType itemType;
     public override string ToString()
     {
         return itemName;

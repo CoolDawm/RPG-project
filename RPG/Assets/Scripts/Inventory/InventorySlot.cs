@@ -1,16 +1,28 @@
+
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
+public enum ItemType
+{
+    Weapon,
+    Defence,
+    Driver,
+    Item
+}
+
 
 public class InventorySlot : MonoBehaviour, ISlot, IDropHandler
 {
+    [SerializeField]
+    private ItemType _allowedItemType;
     public Image icon;
     //public Button removeButton;
     public Item item;
     public Item Item => item;
     private int _itemStackCount = 0;
     public Action onItemInfoUpdate;
+
     private void Start()
     {
         icon=GetComponentInParent<Image>();
@@ -22,16 +34,20 @@ public class InventorySlot : MonoBehaviour, ISlot, IDropHandler
 
     public void AddItem(Item newItem)
     {
-        Debug.Log(newItem.icon);
+        if (!CanAcceptItem(newItem))
+        {
+            Debug.Log("Невозможно добавить предмет: " + newItem.name);
+            return; // Предмет не подходит
+        }
+
         item = newItem;
         icon.sprite = item.icon;
         if (item.isStackable)
         {
             _itemStackCount++;
         }
-      //  icon.enabled = true;
-       // removeButton.interactable = true;
     }
+
 
     public void ClearSlot()
     {
@@ -58,8 +74,8 @@ public class InventorySlot : MonoBehaviour, ISlot, IDropHandler
 
     public bool CanAcceptItem(Item item)
     {
-        Debug.Log("In"+gameObject.name);
-        return true;
+        if (item == null) return true; 
+        return item.itemType == _allowedItemType; 
     }
 
     public void OnDrop(PointerEventData eventData)

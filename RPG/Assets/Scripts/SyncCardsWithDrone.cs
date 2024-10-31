@@ -1,9 +1,17 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SyncCardsWithDrone : MonoBehaviour
 {
     public GameObject sourceObject; 
-    public GameObject targetObject; 
+    public GameObject targetObject;
+    private void Start()
+    {
+        
+        Sync();
+        sourceObject.transform.parent.parent.parent.parent.gameObject.SetActive(false);
+        targetObject.transform.parent.parent.parent.parent.gameObject.SetActive(false);
+    }
 
     void FixedUpdate()
     {
@@ -53,6 +61,7 @@ public class SyncCardsWithDrone : MonoBehaviour
                     // UpdateChild(targetChild, sourceChild);
                 }
             }
+            
         }
     }
 
